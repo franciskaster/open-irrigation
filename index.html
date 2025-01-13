@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Open Irrigation</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <style>
+      :root {
+        --black: #171321;
+        --white: #fefefe;
+
+        --color-1: #234720;
+        --color-2: #ffec5c;
+        --color-3: #bdaa1a;
+        --color-4: #ff5a33;
+        --color-5: #9f341c;
+        --color-6: #44803f;
+        --color-8: #44803f44;
+
+        /* navbar */
+        --navbar-color: var(--color-6);
+        --navbar-text-color: var(--white);
+        /* table */
+        --table-color: var(--color-6);
+        --table-text-color: var(--white);
+        --table-border: var(--color-8);
+        /* button */
+        --button-color: var(--color-6);
+        --button-hover-color: var(--color-1);
+        --button-text-color: var(--white);
+
+        --base-size: 1rem;
+        --scale: 1.15;
+        --h6: calc(var(--base-size) * var(--scale));
+        --h5: calc(var(--h6) * var(--scale));
+        --h4: calc(var(--h5) * var(--scale));
+        --h3: calc(var(--h4) * var(--scale));
+        --h2: calc(var(--h3) * var(--scale));
+        --h1: calc(var(--h2) * var(--scale));
+
+        @media screen and (width < 910px) {
+          --base-size: 0.9rem;
+        }
+
+        @media screen and (width < 400px) {
+          --base-size: 0.85rem;
+        }
+      }
+
+      *,
+      *::after,
+      *::before {
+        box-sizing: inherit;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        box-sizing: border-box;
+        font-size: var(--base-size);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: var(--white);
+        font-size: var(--base-size);
+        color: var(--black);
+    
+      }
+      header{
+        background-color: var(--navbar-color);
+      }
+
+      header nav {
+        max-width: 1270px;
+        margin-left: auto;
+        margin-right: auto;
+        color: var(--navbar-text-color);
+        padding: 1rem;
+      }
+
+      main {
+        padding:  2rem 1rem;
+        max-width: 1270px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      main  {
+        padding-top: 2rem;
+      }
+
+      h1 {
+        font-size: var(--h1);
+      }
+
+      h2 {
+        font-size: var(--h2);
+      }
+
+      h3 {
+        font-size: var(--h3);
+      }
+
+      h4 {
+        font-size: var(--h4);
+      }
+
+      h5 {
+        font-size: var(--h5);
+      }
+
+      h6 {
+        font-size: var(--h6);
+      }
+
+      .day {
+        margin: 5px 0;
+        padding: 10px;
+        background: #e8e8ee;
+        border-radius: 5px;
+      }
+      .day input {
+        margin-left: 10px;
+      }
+
+      button {
+        background: var(--button-color);
+        color: var(--button-text-color);
+        font-size: var(--base-size);
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: var(--button-hover-color);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        position: relative;
+        border: none;
+        font-size: var(--base-size);
+      }
+
+      th {
+        background: var(--table-color);
+        color: var(--table-text-color);
+        vertical-align: baseline;
+      }
+
+      td {
+        border-right: 1px solid var(--table-border);
+      }
+
+      td:last-of-type {
+        border: none;
+      }
+
+      tr:nth-child(even) {
+        background: #f2f2f2;
+      }
+
+      td input {
+        height: 2rem;
+
+        @media only screen and (width < 910px) {
+          width: 100%;
+        }
+      }
+
+      td label {
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+      }
+
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+
+
+      #reset-configs {
+        --button-color: var(--color-4);
+        /* --button-text-color: var(--black); */
+        --button-hover-color: var(--color-5);
+      }
+
+      .actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 2rem;
+      }
+
+      .actions button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        @media only screen and (width > 910px) {
+          width: 200px;
+        }
+      }
+
+      .visually-hidden {
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>Open Irrigation</h1>
+      </nav>
+    </header>
+    <main>
+      <form action="/update" method="GET">
+        <table>
+          <caption class="visually-hidden">
+            Irrigation control
+          </caption>
+          <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Activate</th>
+            <th scope="col">Duration (s)</th>
+            <th scope="col">Time</th>
+          </tr>
+
+
+          <tr>
+            <td row="Day Configuration">1</td>
+
+            <td row="Activate irrigation">
+              <label for="cb-1">
+              </label>
+              <input id="cb-1" type="checkbox" name="enable0" />
+            </td>
+            <td>
+              <label for="ip-duration-1" class="visually-hidden">Enter the irrigation time, in seconds</label>
+              <input id="ip-duration-1" type="number" name="duration0" value="" />
+            </td>
+            <td>
+                <label for="ip-time-1" class="visually-hidden">Enter the time you want to turn on the irrigation, separate hours from minutes using : </label>
+                <input id=""ip-time-1 type="number" name="hour0" value="" />
+            </td>
+          </tr>
+
+       
+        </table>
+        <div class="actions">
+            <button id="save-configs" type="submit">Save Configs</button>
+            <!-- <button id="reset-configs" type="submit">Resetar aplicação</button> -->
+          </div>
+      </form>
+ 
+    </main>
+  </body>
+</html>
