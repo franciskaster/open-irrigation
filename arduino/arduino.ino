@@ -1836,6 +1836,7 @@ void handleUpdate() {
 
 
 void handleIrrigate() {
+  irrigateNow(30);
   String html = buildSavedPage("Irrigation started!");
   server.send(200, "text/html", html);
 }
