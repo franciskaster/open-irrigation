@@ -41,7 +41,7 @@ A **stand‑alone Wi‑Fi irrigation scheduler** powered by an ESP8266.  The fir
 |   1 | Solenoid valve **or** DC pump                            | Match to your water system |
 |   1 | 5 V USB supply for ESP                                   | 500 mA or better           |
 |   1 | 12 V (or required) supply for valve/pump                 | Keep grounds common        |
-|   — | Jumper wires, enclosure, glands, etc.                    | Weather‑proof if outdoors  |
+|   — | Jumper wires, enclosure, etc.                            | Weather‑proof if outdoors  |
 
 ---
 
