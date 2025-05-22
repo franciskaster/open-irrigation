@@ -2,8 +2,11 @@
 
 A **stand‑alone Wi‑Fi irrigation scheduler** powered by an ESP8266.  The firmware spins up its own web‑server, so you can configure and trigger watering directly from any browser on the same network—no cloud, hub, or mobile app required.
 
-![Screenshot of the scheduler UI](docs/screenshot.png)
+### Desktop view
+![Screenshot of the desktop scheduler UI](op1.png)
 
+### Mobile view
+![Screenshot of the mobile scheduler UI](op2.png)
 ---
 
 ## Quick Overview
