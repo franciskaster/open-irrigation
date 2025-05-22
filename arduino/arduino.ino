@@ -7,6 +7,48 @@
 const char *ssid = "";
 const char *password = "";
 
+const char PAGE_SAVED_TPL[] PROGMEM = R"rawliteral(
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>%s</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fefefe;
+      color: #171321;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 { font-size: 2rem; margin-bottom: 1rem; }
+    a  {
+      font-size: 1rem;
+      color: #ffffff;
+      background-color: #44803f;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    a:hover { background-color: #234720; }
+  </style>
+</head>
+<body>
+  <h1>%s</h1>
+  <a href="/">Return</a>
+</body>
+</html>
+)rawliteral";
+
+
 const uint8_t faviconData[] PROGMEM = {
     0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x10, 0x10, 0x00, 0x00, 0x01, 0x00,
     0x20, 0x00, 0x68, 0x04, 0x00, 0x00, 0x36, 0x00, 0x00, 0x00, 0x20, 0x20,
@@ -1394,6 +1436,7 @@ void setup()
 
   server.on("/", handleRoot);
   server.on("/update", handleUpdate);
+  server.on("/irrigate", handleIrrigate);
   server.on("/favicon.ico", handleFavicon);
   server.begin();
   Serial.println("Web server started!");
@@ -1412,6 +1455,14 @@ void atualizarHora()
   Serial.print("Synchronized time: ");
   Serial.println(asctime(timeInfo));
 }
+
+String buildSavedPage(const char* title)
+{
+  static char buf[2048];
+  snprintf_P(buf, sizeof(buf), PAGE_SAVED_TPL, title, title);
+  return String(buf);
+}
+
 
 void handleRoot()
 {
@@ -1498,6 +1549,8 @@ void handleRoot()
         margin-right: auto;
         color: var(--navbar-text-color);
         padding: 1rem;
+        display:flex;
+        justify-content: space-between;
       }
 
       main {
@@ -1666,6 +1719,11 @@ void handleRoot()
     <header>
       <nav>
         <h1>Open Irrigation</h1>
+        <form action="/irrigate" method="GET">
+          <button id="irrigate-now" type="submit" style="background-color: #c34614;">
+            Irrigate now (30s)
+          </button>
+        </form>
       </nav>
     </header>
     <main>
@@ -1772,53 +1830,23 @@ void handleUpdate() {
 
     saveConfigToEEPROM();
 
-  String html = R"rawliteral(
-    <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Settings Saved</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #fefefe;
-        color: #171321;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        text-align: center;
-      }
-      h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-      }
-      a {
-        font-size: 1rem;
-        color: #ffffff;
-        background-color: #44803f;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-      }
-      a:hover {
-        background-color: #234720;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Settings Saved</h1>
-    <a href="/">Return</a>
-  </body>
-  </html>
-
-    )rawliteral";
+  String html = buildSavedPage("Settings Saved");
   server.send(200, "text/html", html);
+}
+
+
+void handleIrrigate() {
+  String html = buildSavedPage("Irrigation started!");
+  server.send(200, "text/html", html);
+}
+
+
+void irrigateNow(int time){
+      Serial.println("turning on the irrigation output...");
+      digitalWrite(pinOutput, HIGH);
+      delay(time * 1000);
+      digitalWrite(pinOutput, LOW);
+      Serial.println("turning off the irrigation output...");
 }
 
 void loop()
@@ -1834,11 +1862,7 @@ void loop()
 
     if (irrigationConfig[dayOfMonth].enable && irrigationConfig[dayOfMonth].duration > 0 && String(irrigationConfig[dayOfMonth].time) == currentTime && timeInfo->tm_sec == 0)
     {
-      Serial.println("turning on the irrigation output...");
-      digitalWrite(pinOutput, HIGH);
-      delay(irrigationConfig[dayOfMonth].duration * 1000);
-      digitalWrite(pinOutput, LOW);
-      Serial.println("turning off the irrigation output...");
+      irrigateNow(irrigationConfig[dayOfMonth].duration);
     }
   }
 }
